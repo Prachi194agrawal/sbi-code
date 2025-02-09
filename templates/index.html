@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Dashboard</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Fraud Detection System</h1>
+        <nav>
+            {% if user %}
+                <p>Hello {{ user }}! <a href="/logout" class="btn btn-secondary">Logout</a></p>
+                <a href="/chatbot" class="btn btn-primary">Chat with us</a>
+            {% else %}
+                <p>
+                    <a href="/login" class="btn btn-primary">Login</a> or 
+                    <a href="/signup" class="btn btn-secondary">Signup</a>
+                </p>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% if user %}
+        <form action="/predict" method="post" class="fraud-detection-form" novalidate>
+            <fieldset>
+                <legend>Personal Information</legend>
+                
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" 
+                           id="age" 
+                           name="age" 
+                           required 
+                           min="18" 
+                           max="100"
+                           aria-describedby="age-help">
+                    <small id="age-help" class="help-text">Must be between 18 and 100 years</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="occupation">Occupation:</label>
+                    <select id="occupation" 
+                            name="occupation" 
+                            required>
+                        <option value="">Select Occupation</option>
+                        <option value="Service">Service</option>
+                        <option value="Self-Employed">Self-Employed</option>
+                        <option value="Business">Business</option>
+                        <option value="Agriculturist">Agriculturist</option>
+                        <option value="Housewife">Housewife</option>
+                        <option value="Profession">Profession</option>
+                        <option value="Retired">Retired</option>
+                        <option value="Student">Student</option>
+                        <option value="_Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="marital_status">Marital Status:</label>
+                    <select id="marital_status" 
+                            name="marital_status" 
+                            required>
+                        <option value="">Select Marital Status</option>
+                        <option value="Married">Married</option>
+                        <option value="Single">Single</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="annual_income">Annual Income:</label>
+                    <input type="number" 
+                           id="annual_income" 
+                           name="annual_income" 
+                           required 
+                           min="0"
+                           step="1000"
+                           aria-describedby="income-help">
+                    <small id="income-help" class="help-text">Enter amount in whole numbers</small>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Policy Information</legend>
+
+                <div class="form-group">
+                    <label for="policy_sum_assured">Policy Sum Assured:</label>
+                    <input type="number" 
+                           id="policy_sum_assured" 
+                           name="policy_sum_assured" 
+                           required 
+                           min="0"
+                           step="1000">
+                </div>
+
+                <div class="form-group">
+                    <label for="premium">Premium:</label>
+                    <input type="number" 
+                           id="premium" 
+                           name="premium" 
+                           required 
+                           min="0" 
+                           step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="premium_payment_mode">Premium Payment Mode:</label>
+                    <select id="premium_payment_mode" 
+                            name="premium_payment_mode" 
+                            required>
+                        <option value="">Select Payment Mode</option>
+                        <option value="Yearly">Yearly</option>
+                        <option value="Half yearly">Half Yearly</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Single">Single</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="product_type">Product Type:</label>
+                    <select id="product_type" 
+                            name="product_type" 
+                            required>
+                        <option value="">Select Product Type</option>
+                        <option value="ULIP">ULIP</option>
+                        <option value="Traditional">Traditional</option>
+                        <option value="Pension">Pension</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="channel">Channel:</label>
+                    <select id="channel" 
+                            name="channel" 
+                            required>
+                        <option value="">Select Channel</option>
+                        <option value="Retail Agency">Retail Agency</option>
+                        <option value="Bancassurance">Bancassurance</option>
+                        <option value="Institutional Alliance">Institutional Alliance</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Additional Details</legend>
+
+                <div class="form-group">
+                    <label for="requirement_flag">Requirement Flag:</label>
+                    <select id="requirement_flag" 
+                            name="requirement_flag" 
+                            required>
+                        <option value="">Select Requirement</option>
+                        <option value="Non Medical">Non Medical</option>
+                        <option value="Medical">Medical</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="postcode">Correspondence Postcode:</label>
+                    <select id="postcode" 
+                            name="postcode" 
+                            required>
+                        <option value="">Select Postcode</option>
+                        <option value="816115">816115</option>
+                        <option value="464001">464001</option>
+                        <option value="731238">731238</option>
+                        <option value="281504">281504</option>
+                        <option value="606001">606001</option>
+                        <option value="476221">476221</option>
+                        <option value="335501">335501</option>
+                        <option value="500037">500037</option>
+                        <option value="625535">625535</option>
+                        <option value="829203">829203</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" 
+                            name="status" 
+                            required>
+                        <option value="">Select Status</option>
+                        <option value="Claim">Claim</option>
+                        <option value="Cancellation">Cancellation</option>
+                        <option value="Inforce">Inforce</option>
+                        <option value="Lapse">Lapse</option>
+                        <option value="Maturity">Maturity</option>
+                        <option value="Rejection">Rejection</option>
+                        <option value="Technical Lapse">Technical Lapse</option>
+                        <option value="Terminated">Terminated</option>
+                        <option value="Withdrawal">Withdrawal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sub_status">Sub Status:</label>
+                    <select id="sub_status" 
+                            name="sub_status" 
+                            required>
+                        <option value="">Select Sub Status</option>
+                        <option value="Death Claim Repudiated">Death Claim Repudiated</option>
+                        <option value="Other Reason">Other Reason</option>
+                        <option value="Surrendered Reinvested Auto">Surrendered Reinvested Auto</option>
+                        <option value="Free Look Cancellation">Free Look Cancellation</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Predict Fraud</button>
+                <button type="reset" class="btn btn-secondary">Reset Form</button>
+            </div>
+        </form>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Fraud Detection System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Basic form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const form = e.target;
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                Array.from(form.elements).forEach(input => {
+                    if (!input.validity.valid) {
+                        input.classList.add('invalid');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
